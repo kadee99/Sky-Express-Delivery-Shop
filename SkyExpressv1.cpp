@@ -72,6 +72,8 @@ int main(){
 
         if (battery < 30) 
           cout << "Battery low! Please recharge soon.\n";
+        if(battery<0)
+            battery=0;
     }
     if (battery<=10)
       cout<<"battery is too low to start another delivery";
