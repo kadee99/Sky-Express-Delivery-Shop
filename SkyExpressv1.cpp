@@ -2,33 +2,114 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <windows.h>
 using namespace std;
+
+// Function to set console text color
+void setColor(int color) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+// Function to clear screen
+void clearScreen() 
+{
+    system("cls");
+}
+
+// Function to print the drone battery bar
+void printBattery(int battery)
+{
+    cout << "\n  Battery: [";
+
+    int bars = battery / 5;
+
+    if (battery > 60) setColor(10);
+    else if (battery > 30) setColor(14);
+    else setColor(12);
+
+    for (int i = 0; i < bars; i++)
+    {
+        cout << "=";
+    }
+    setColor(7);
+    for (int i = bars; i < 20; i++) 
+    {
+        cout << " ";
+    }
+
+    cout << "] " << battery << "%";
+
+    if (battery > 80)
+    {
+        setColor(10);
+        cout << " (Excellent)";
+    }
+    else if (battery > 60) 
+    {
+        setColor(10);
+        cout << " (Good)";
+    }
+    else if (battery > 40) 
+    {
+        setColor(14);
+        cout << " (Fair)";
+    }
+    else if (battery > 20) 
+    {
+        setColor(12);
+        cout << " (Low - Recharge Soon)";
+    }
+    else 
+    {
+        setColor(12);
+        cout << " (CRITICAL!)";
+    }
+    setColor(7);
+    cout << endl;
+}
+
+// Function to print animated drone
+void printDrone() {
+    setColor(11);
+    cout << "\n     ___" << endl;
+    cout << "    /   \\" << endl;
+    cout << "   | ^_^ |  <- DRONE X-2000" << endl;
+    cout << "    \\___/" << endl;
+    cout << "   O  O  O" << endl;
+    setColor(7);
+}
 
 int main(){
     srand(time(0));
-
     int battery = 100;
     int totalOrders = 0;
     int successfulDeliveries = 0;
     int totalEarnings = 0;
     bool running = true; //controls main loop
-
+    
+    clearScreen();
+    setColor(14); // Yellow
     cout << "=== SKY EXPRESS DELIVERY ===\n\n";
-
+    setColor(7); // White
+    
   //loop runs till 
     while (battery>=10){
-        cout << "\nBattery: " << battery << "%\n";
+        clearScreen();
+        setColor(14);
+        cout << "=== SKY EXPRESS DELIVERY ===\n\n";
+        setColor(7);
+        
+        printDrone();
+        printBattery(battery);
         cout << "Total Orders: " << totalOrders << " | Success: " << successfulDeliveries << "\n";
         cout << "Total Earnings: $" << totalEarnings << "\n";
         cout << "\nAvailable Items:\n";
         cout << "1. Pizza - $15\n2. Burger - $12\n3. Medicine - $25\n0. Exit\n";
         cout << "Choose an item: ";
-
         int choice;
         cin >> choice;
         if (choice == 0) 
             break;//exit
-
         string item;
         int price = 0;
         if(choice == 1)
@@ -58,7 +139,6 @@ int main(){
         getline(cin, name); //allows names with spaces
         cout << "Enter your address: ";
         getline(cin, address);
-
         cout << "\nDelivering " << item << " to " << name << "...\n";
         //start delivery: choosing a random distance(1 to 5)
         int distance = 1 + rand() % 5;
@@ -69,18 +149,19 @@ int main(){
         totalOrders++;
         successfulDeliveries++;
         totalEarnings += price;
-
         if (battery < 30) 
           cout << "Battery low! Please recharge soon.\n";
+        if(battery<0)
+            battery=0;
     }
     if (battery<=10)
       cout<<"battery is too low to start another delivery";
 //Display Final Report of deliveries
+    clearScreen();
     cout << "\n=== Final Report ===\n";
     cout << "Orders: " << totalOrders << " | Success: " << successfulDeliveries << endl;
     cout << "Earnings: $" << totalEarnings << endl;
     cout << "Remaining Battery: " << battery << "%\n";
     cout << "Goodbye!\n";
-
     return 0;
 }
