@@ -138,7 +138,15 @@ void getItemDetails(int choice, string& itemName, string& emoji, int& price) {
         price = 8;
     }
 }
-
+// Function to print shop header
+void printShopHeader() {
+    setColor(14);
+    cout << "\n  ===========================================" << endl;
+    cout << "          SKY EXPRESS DELIVERY SHOP" << endl;
+    cout << "     Fast, Smart, Automated Deliveries!" << endl;
+    cout << "  ===========================================\n" << endl;
+    setColor(7);
+}
 int main(){
     srand(time(0));
     int battery = 100;
@@ -148,15 +156,11 @@ int main(){
     bool running = true; //controls main loop
     
     clearScreen();
-    setColor(14); // Yellow
-    cout << "=== SKY EXPRESS DELIVERY ===\n\n";
-    setColor(7); // White
+    printShopHeader();
     
     while (battery >= 10) {
         clearScreen();
-        setColor(14);
-        cout << "=== SKY EXPRESS DELIVERY ===\n\n";
-        setColor(7);
+        printShopHeader();
         
         printDrone();
         printBattery(battery);
@@ -192,6 +196,21 @@ int main(){
         cout << "Enter your address: ";
         getline(cin, address);
 
+        clearScreen();
+        printShopHeader();
+        cout << "\n  Preparing order..." << endl;
+        Sleep(1000);
+        cout << "  Packing item securely..." << endl;
+        Sleep(1000);
+        cout << "  Loading onto drone..." << endl;
+        Sleep(1500);
+
+        printDrone();
+        setColor(10);
+        cout << "\n  Drone loaded and ready!" << endl;
+        setColor(7);
+        Sleep(1500);
+
         cout << "\nDelivering " << item << " to " << name << "...\n";
         int distance = 1 + rand() % 5;
         int batteryUse = distance * 5 + 10;
@@ -212,6 +231,7 @@ int main(){
         cout << "Battery is too low to start another delivery.\n";
 
     clearScreen();
+    printShopHeader();
     cout << "\n=== Final Report ===\n";
     cout << "Orders: " << totalOrders << " | Success: " << successfulDeliveries << endl;
     cout << "Earnings: $" << totalEarnings << endl;
