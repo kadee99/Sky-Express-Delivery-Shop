@@ -79,6 +79,74 @@ void printDrone() {
     setColor(7);
 }
 
+// Function to show shop menu
+void showShopMenu() {
+    setColor(11);
+    cout << "  Available Items:\n" << endl;
+    setColor(7);
+
+    cout << "  1. Pizza           - $15  (Hot & Fresh)" << endl;
+    cout << "  2. Burger Meal     - $12  (Combo with Fries)" << endl;
+    cout << "  3. Medicine        - $25  (Urgent Care Package)" << endl;
+    cout << "  4. Books           - $20  (Educational Bundle)" << endl;
+    cout << "  5. Electronics     - $50  (Tech Gadgets)" << endl;
+    cout << "  6. Gift Package    - $30  (Special Occasion)" << endl;
+    cout << "  7. Tacos           - $10  (Mexican Fiesta)" << endl;
+    cout << "  8. Coffee & Snacks - $8   (Energy Boost)" << endl;
+}
+
+//  Function to get item details (modular replacement for if-else block)
+void getItemDetails(int choice, string& itemName, string& emoji, int& price) {
+    if (choice == 1) {
+        itemName = "Pizza";
+        emoji = "";
+        price = 15;
+    }
+    else if (choice == 2) {
+        itemName = "Burger Meal";
+        emoji = "";
+        price = 12;
+    }
+    else if (choice == 3) {
+        itemName = "Medicine";
+        emoji = "";
+        price = 25;
+    }
+    else if (choice == 4) {
+        itemName = "Books";
+        emoji = "";
+        price = 20;
+    }
+    else if (choice == 5) {
+        itemName = "Electronics";
+        emoji = "";
+        price = 50;
+    }
+    else if (choice == 6) {
+        itemName = "Gift Package";
+        emoji = "";
+        price = 30;
+    }
+    else if (choice == 7) {
+        itemName = "Tacos";
+        emoji = "";
+        price = 10;
+    }
+    else if (choice == 8) {
+        itemName = "Coffee & Snacks";
+        emoji = "";
+        price = 8;
+    }
+}
+// Function to print shop header
+void printShopHeader() {
+    setColor(14);
+    cout << "\n  ===========================================" << endl;
+    cout << "          SKY EXPRESS DELIVERY SHOP" << endl;
+    cout << "     Fast, Smart, Automated Deliveries!" << endl;
+    cout << "  ===========================================\n" << endl;
+    setColor(7);
+}
 int main(){
     srand(time(0));
     int battery = 100;
@@ -88,76 +156,82 @@ int main(){
     bool running = true; //controls main loop
     
     clearScreen();
-    setColor(14); // Yellow
-    cout << "=== SKY EXPRESS DELIVERY ===\n\n";
-    setColor(7); // White
+    printShopHeader();
     
-  //loop runs till 
-    while (battery>=10){
+    while (battery >= 10) {
         clearScreen();
-        setColor(14);
-        cout << "=== SKY EXPRESS DELIVERY ===\n\n";
-        setColor(7);
+        printShopHeader();
         
         printDrone();
         printBattery(battery);
         cout << "Total Orders: " << totalOrders << " | Success: " << successfulDeliveries << "\n";
-        cout << "Total Earnings: $" << totalEarnings << "\n";
-        cout << "\nAvailable Items:\n";
-        cout << "1. Pizza - $15\n2. Burger - $12\n3. Medicine - $25\n0. Exit\n";
-        cout << "Choose an item: ";
+        cout << "Total Earnings: $" << totalEarnings << "\n\n";
+
+        showShopMenu();
+
+        cout << "\n  0. Exit\n";
+        cout << "\n  Choose an item: ";
         int choice;
         cin >> choice;
-        if (choice == 0) 
-            break;//exit
-        string item;
-        int price = 0;
-        if(choice == 1)
-        { 
-            item = "Pizza";
-            price = 15;
-        }
-        else if(choice == 2)
-        {
-        item = "Burger";
-        price = 12;
-        }
-        else if(choice == 3)
-        { 
-            item = "Medicine";
-            price = 25;
-        }
-        else 
-        {
+
+        if (choice == 0)
+            break;
+
+        // validation check
+        if (choice < 1 || choice > 8) {
             cout << "Invalid choice.\n";
-            continue;//skip and re run loop if choice is invalid
+            continue;
         }
-        //get customer details
+
+        //Uses new function instead of long if-else block
+        string item, emoji;
+        int price = 0;
+        getItemDetails(choice, item, emoji, price);
+
+        // Get customer details
         string name, address;
         cout << "\nEnter your name: ";
         cin.ignore();
-        getline(cin, name); //allows names with spaces
+        getline(cin, name);
         cout << "Enter your address: ";
         getline(cin, address);
+
+        clearScreen();
+        printShopHeader();
+        cout << "\n  Preparing order..." << endl;
+        Sleep(1000);
+        cout << "  Packing item securely..." << endl;
+        Sleep(1000);
+        cout << "  Loading onto drone..." << endl;
+        Sleep(1500);
+
+        printDrone();
+        setColor(10);
+        cout << "\n  Drone loaded and ready!" << endl;
+        setColor(7);
+        Sleep(1500);
+
         cout << "\nDelivering " << item << " to " << name << "...\n";
-        //start delivery: choosing a random distance(1 to 5)
         int distance = 1 + rand() % 5;
-        int batteryUse = distance * 5 + 10;//formula adds a base 10% drain + 5% per distance unit
+        int batteryUse = distance * 5 + 10;
         battery -= batteryUse;
-      
+
         cout << "Delivery completed successfully!\n";
         totalOrders++;
         successfulDeliveries++;
         totalEarnings += price;
-        if (battery < 30) 
-          cout << "Battery low! Please recharge soon.\n";
-        if(battery<0)
-            battery=0;
+
+        if (battery < 30)
+            cout << "Battery low! Please recharge soon.\n";
+        if (battery < 0)
+            battery = 0;
     }
-    if (battery<=10)
-      cout<<"battery is too low to start another delivery";
-//Display Final Report of deliveries
+
+    if (battery <= 10)
+        cout << "Battery is too low to start another delivery.\n";
+
     clearScreen();
+    printShopHeader();
     cout << "\n=== Final Report ===\n";
     cout << "Orders: " << totalOrders << " | Success: " << successfulDeliveries << endl;
     cout << "Earnings: $" << totalEarnings << endl;
@@ -165,3 +239,4 @@ int main(){
     cout << "Goodbye!\n";
     return 0;
 }
+
