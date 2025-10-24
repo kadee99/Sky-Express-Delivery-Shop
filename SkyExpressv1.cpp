@@ -78,7 +78,21 @@ void printDrone() {
     cout << "   O  O  O" << endl;
     setColor(7);
 }
+// Function to show shop menu
+void showShopMenu() {
+    setColor(11);
+    cout << "  Available Items:\n" << endl;
+    setColor(7);
 
+    cout << "  1. Pizza           - $15  (Hot & Fresh)" << endl;
+    cout << "  2. Burger Meal     - $12  (Combo with Fries)" << endl;
+    cout << "  3. Medicine        - $25  (Urgent Care Package)" << endl;
+    cout << "  4. Books           - $20  (Educational Bundle)" << endl;
+    cout << "  5. Electronics     - $50  (Tech Gadgets)" << endl;
+    cout << "  6. Gift Package    - $30  (Special Occasion)" << endl;
+    cout << "  7. Tacos           - $10  (Mexican Fiesta)" << endl;
+    cout << "  8. Coffee & Snacks - $8   (Energy Boost)" << endl;
+}
 int main(){
     srand(time(0));
     int battery = 100;
@@ -103,8 +117,8 @@ int main(){
         printBattery(battery);
         cout << "Total Orders: " << totalOrders << " | Success: " << successfulDeliveries << "\n";
         cout << "Total Earnings: $" << totalEarnings << "\n";
-        cout << "\nAvailable Items:\n";
-        cout << "1. Pizza - $15\n2. Burger - $12\n3. Medicine - $25\n0. Exit\n";
+        showShopMenu();
+        cout << "\n  0. Exit\n";
         cout << "Choose an item: ";
         int choice;
         cin >> choice;
@@ -112,26 +126,51 @@ int main(){
             break;//exit
         string item;
         int price = 0;
-        if(choice == 1)
-        { 
-            item = "Pizza";
-            price = 15;
-        }
-        else if(choice == 2)
-        {
-        item = "Burger";
+       if (choice == 1)
+       {
+        item = "Pizza";
+        price = 15;
+       }
+       else if (choice == 2)
+       {
+        item = "Burger Meal";
         price = 12;
+       }
+       else if (choice == 3)
+       {
+       item = "Medicine";
+        price = 25;
         }
-        else if(choice == 3)
-        { 
-            item = "Medicine";
-            price = 25;
-        }
-        else 
-        {
-            cout << "Invalid choice.\n";
-            continue;//skip and re run loop if choice is invalid
-        }
+      else if (choice == 4)
+       {
+        item = "Books";
+        price = 20;
+       }
+      else if (choice == 5)
+       {
+        item = "Electronics";
+        price = 50;
+       }
+      else if (choice == 6)
+       {
+        item = "Gift Package";
+        price = 30;
+       }
+      else if (choice == 7)
+      {
+       item = "Tacos";
+       price = 10;
+      }
+      else if (choice == 8)
+      {
+       item = "Coffee & Snacks";
+       price = 8;
+      }
+      else 
+      {
+        cout << "Invalid choice.\n";
+        continue;//skip and re run loop if choice is invalid
+      }
         //get customer details
         string name, address;
         cout << "\nEnter your name: ";
