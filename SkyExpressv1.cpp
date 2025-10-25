@@ -127,6 +127,7 @@ void showShopMenu(){
     cout << "  6. Gift Package    - $30  (Special Occasion)" << endl;
     cout << "  7. Tacos           - $10  (Mexican Fiesta)" << endl;
     cout << "  8. Coffee & Snacks - $8   (Energy Boost)" << endl;
+    cout << "\n  9. Recharge Drone" << endl;
  }
 
 // Function to get item details
@@ -179,8 +180,39 @@ void getItemDetails(int choice, string& itemName, string& emoji, int& price){
         emoji = "";
         price = 8;
     }
- }
+    else if (choice == 9)
+    {
+    clearScreen();
+    printShopHeader();
+    printDrone();
 
+    cout << "\n  RECHARGE STATION" << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Current battery: " << battery << "%" << endl;
+
+    if (battery >= 90) {
+        cout << "\n  Battery is already high!" << endl;
+    }
+    else {
+        cout << "\n  Charging..." << endl;
+        int rechargeAmount = 100 - battery;
+        for (int i = 0; i < 5; i++) {
+            battery += rechargeAmount / 5;
+            if (battery > 100) battery = 100;
+            cout << "  Battery: " << battery << "%" << endl;
+            Sleep(800);
+        }
+        cout << "\n  Drone fully recharged!" << endl;
+        battery = 100;
+    }
+    Sleep(2000);
+}
+
+// Function to calculate distance
+int calculateDistance()
+{
+    return 1 + (rand() % 5);
+}
 // Function to generate random weather
 string getRandomWeather()
 {
@@ -201,6 +233,175 @@ string getTimeOfDay()
     else if (hour >= 17 && hour < 21) return "Evening";
     else return "Night";
 }
+// Function to deliver package
+bool deliverPackage(string itemName, string emoji, int price, string customerName, string address, int& battery, int& earnings) {
+    clearScreen();
+    printShopHeader();
+
+    int distance = calculateDistance();
+    string timeOfDay = getTimeOfDay();
+
+    setColor(14);
+    cout << "\n  ORDER DETAILS" << endl;
+    setColor(7);
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Item: " << itemName << endl;
+    cout << "  Price: $" << price << endl;
+    cout << "  Customer: " << customerName << endl;
+    cout << "  Address: " << address << endl;
+    cout << "  Distance: " << distance << " km" << endl;
+    cout << "  Time: " << timeOfDay << endl;
+    cout << "  -------------------------------------------" << endl;
+
+    printBattery(battery);
+
+    cout << "\n  Preparing order..." << endl;
+    Sleep(1000);
+    cout << "  Packing item securely..." << endl;
+    Sleep(1000);
+    cout << "  Loading onto drone..." << endl;
+    Sleep(1500);
+
+    printDrone();
+
+    setColor(10);
+    cout << "\n  Drone loaded and ready!" << endl;
+    setColor(7);
+    Sleep(1500);
+
+    string weather = getRandomWeather();
+
+    clearScreen();
+    printShopHeader();
+    cout << "\n  WEATHER CHECK" << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Current weather: " << weather << endl;
+
+    if (weather == "RAIN"){
+        cout << "\n  Heavy rain detected!" << endl;
+        cout << "  Delivery delayed due to unsafe flying conditions." << endl;
+        cout << "  Refund issued: $" << price << endl;
+        Sleep(3000);
+        return false;
+    }
+    else if (weather == "STORMY"){
+        cout << "\n  Storm warning! Delivery canceled." << endl;
+        cout << "  Full refund: $" << price << endl;
+        Sleep(3000);
+        return false;
+    }
+    else if (weather == "WINDY"){
+        if (battery < 40) {
+            cout << "\n  Battery too low for windy conditions!" << endl;
+            cout << "  Emergency landing and recharge..." << endl;
+            battery += 15;
+            if (battery > 100) battery = 100;
+            cout << "\n  Drone recharged to " << battery << "%" << endl;
+            cout << "  Delivery delayed. Please try again later." << endl;
+            Sleep(3000);
+            return false;
+        }
+        else{
+            cout << "\n  Strong winds detected. Proceeding with caution..." << endl;
+        }
+    }
+    else if (weather == "FOGGY"){
+        cout << "\n  Low visibility detected. Activating sensors..." << endl;
+        Sleep(2000);
+        cout << "  Safe to proceed." << endl;
+    }
+    else{
+        cout << "\n  Perfect flying conditions!" << endl;
+    }
+
+    Sleep(2000);
+
+    bool hasObstacle = (rand() % 100) < 30;
+    int batteryUsed = 0;
+
+    clearScreen();
+    printShopHeader();
+    cout << "\n  DELIVERY IN PROGRESS" << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Destination: " << address << endl;
+    cout << "  Distance remaining: " << distance << " km" << endl;
+    cout << "  -------------------------------------------\n" << endl;
+
+    printFlyingDrone(0);
+    Sleep(1000);
+
+    if (hasObstacle){
+        cout << "\n  OBSTACLE ALERT!" << endl;
+        int obstacleType = rand() % 3;
+        if (obstacleType == 0) cout << "  Obstacle: Building" << endl;
+        else if (obstacleType == 1) cout << "  Obstacle: Bird flock" << endl;
+        else cout << "  Obstacle: Tree" << endl;
+        Sleep(1500);
+        cout << "  Rerouting... (Extra 5% battery used)" << endl;
+        battery -= 5;
+        batteryUsed = 5;
+    }
+
+    int stages = 4;
+    for (int i = 1; i <= stages; i++){
+        clearScreen();
+        printShopHeader();
+        cout << "\n  DELIVERY IN PROGRESS" << endl;
+        cout << "  -------------------------------------------" << endl;
+
+        int progress = (i * 100) / stages;
+        cout << "  Progress: [";
+
+        int bars = progress / 5;
+        setColor(10);
+        for (int j = 0; j < bars; j++) cout << "#";
+        setColor(8);
+        for (int j = bars; j < 20; j++) cout << "-";
+        setColor(7);
+        cout << "] " << progress << "%" << endl;
+
+        cout << "  Distance remaining: " << (distance * (stages - i)) / stages << " km" << endl;
+        cout << "  -------------------------------------------\n" << endl;
+
+        printFlyingDrone(i);
+        if (i == 1) cout << "\n  Status: Taking off..." << endl;
+        else if (i == 2) cout << "\n  Status: Cruising..." << endl;
+        else if (i == 3) cout << "\n  Status: Approaching destination..." << endl;
+        else cout << "\n  Status: Landing..." << endl;
+
+        Sleep(1500);
+    }
+
+    int extraBattery = (distance * 3) + (10 + rand() % 11);
+    battery -= extraBattery;
+    batteryUsed += extraBattery;
+    if (battery < 0) battery = 0;
+
+    clearScreen();
+    printShopHeader();
+
+    cout << "\n  DELIVERY SUCCESSFUL!" << endl;
+    cout << "\n  Package delivered successfully." << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Customer: " << customerName << endl;
+    cout << "  Item: " << itemName << endl;
+    cout << "  Location: " << address << endl;
+    cout << "  Distance: " << distance << " km" << endl;
+    cout << "  Battery used: " << batteryUsed << "%" << endl;
+    cout << "  Time: " << timeOfDay << endl;
+    cout << "  Weather: " << weather << endl;
+    cout << "  -------------------------------------------" << endl;
+
+    printBattery(battery);
+    earnings += price;
+
+    cout << "\n  Earnings: +$" << price << endl;
+    cout << "  Customer satisfaction: " << (80 + rand() % 21) << "%" << endl;
+    Sleep(4000);
+    return true;
+}
+
+int delayedDeliveries = 0;
 
 int main() {
     srand(time(0));
@@ -212,6 +413,11 @@ int main() {
 
     clearScreen();
     printShopHeader();
+    cout << "\n  Welcome to Sky Express Delivery!" << endl;
+    cout << "  Press Enter to start...";
+    cin.ignore();
+    Sleep(1000);
+
 
     while (battery >= 10) {
         clearScreen();
@@ -240,6 +446,8 @@ int main() {
         string item, emoji;
         int price = 0;
         getItemDetails(choice, item, emoji, price);
+        calculateDistance();
+
 
         string name, address;
         cout << "\nEnter your name: ";
@@ -247,170 +455,21 @@ int main() {
         getline(cin, name);
         cout << "Enter your address: ";
         getline(cin, address);
+        cout << "Any special instructions? (or press Enter): ";
+        string instructions;
+        getline(cin, instructions);
 
-        int distance = 1 + rand() % 5;
-        string timeOfDay = getTimeOfDay();
 
-        clearScreen();
-        printShopHeader();
+       totalOrders++;
+       bool success = deliverPackage(item, emoji, price, name, address, battery, totalEarnings);
+       if (success) successfulDeliveries++;
+       else delayedDeliveries++;
 
-        setColor(14);
-        cout << "\n  ORDER DETAILS" << endl;
-        setColor(7);
-        cout << "  -------------------------------------------" << endl;
-        cout << "  Item: " << item << endl;
-        cout << "  Price: $" << price << endl;
-        cout << "  Customer: " << name << endl;
-        cout << "  Address: " << address << endl;
-        cout << "  Distance: " << distance << " km" << endl;
-        cout << "  Time: " << timeOfDay << endl;
-        cout << "  -------------------------------------------" << endl;
+      cout << "\n  Press Enter to continue...";
+      cin.ignore();
+  
 
-        cout << "\n  Preparing order..." << endl;
-        Sleep(1000);
-        cout << "  Packing item securely..." << endl;
-        Sleep(1000);
-        cout << "  Loading onto drone..." << endl;
-        Sleep(1500);
-
-        printDrone();
-
-        setColor(10);
-        cout << "\n  Drone loaded and ready!" << endl;
-        setColor(7);
-        Sleep(1500);
-
-        string weather = getRandomWeather();
-        clearScreen();
-        printShopHeader();
-        cout << "\n  WEATHER CHECK" << endl;
-        cout << "  -------------------------------------------" << endl;
-        cout << "  Current weather: " << weather << endl;
-
-        bool deliveryCanceled = false;
-
-        if (weather == "RAIN")
-        {
-            cout << "\n  Heavy rain detected!" << endl;
-            cout << "  Delivery delayed due to unsafe flying conditions." << endl;
-            cout << "  Refund issued: $" << price << endl;
-            deliveryCanceled = true;
-            Sleep(3000);
-        }
-        else if (weather == "STORMY")
-        {
-            cout << "\n  Storm warning! Delivery canceled." << endl;
-            cout << "  Full refund: $" << price << endl;
-            deliveryCanceled = true;
-            Sleep(3000);
-        }
-        else if (weather == "WINDY")
-        {
-            if (battery < 40)
-            {
-                cout << "\n  Battery too low for windy conditions!" << endl;
-                cout << "  Emergency landing and recharge..." << endl;
-                battery += 15;
-                if (battery > 100) battery = 100;
-                cout << "\n  Drone recharged to " << battery << "%" << endl;
-                cout << "  Delivery delayed. Please try again later." << endl;
-                deliveryCanceled = true;
-                Sleep(3000);
-            }
-            else
-            {
-                cout << "\n  Strong winds detected. Proceeding with caution..." << endl;
-            }
-        }
-        else if (weather == "FOGGY")
-        {
-            cout << "\n  Low visibility detected. Activating sensors..." << endl;
-            Sleep(2000);
-            cout << "  Safe to proceed." << endl;
-        }
-        else
-        {
-            cout << "\n  Perfect flying conditions!" << endl;
-        }
-
-        Sleep(2000);
-
-        if (deliveryCanceled)
-        {
-            totalOrders++;
-            continue;
-        }
-
-        bool hasObstacle = (rand() % 100) < 30;
-        int batteryUsed = 0;
-
-        clearScreen();
-        printShopHeader();
-        cout << "\n  DELIVERY IN PROGRESS" << endl;
-        cout << "  -------------------------------------------" << endl;
-        cout << "  Destination: " << address << endl;
-        cout << "  Distance remaining: " << distance << " km" << endl;
-        cout << "  -------------------------------------------\n" << endl;
-
-        printFlyingDrone(0);
-        Sleep(1000);
-
-        if (hasObstacle)
-        {
-            cout << "\n  OBSTACLE ALERT!" << endl;
-            int obstacleType = rand() % 3;
-            if (obstacleType == 0) cout << "  Obstacle: Building" << endl;
-            else if (obstacleType == 1) cout << "  Obstacle: Bird flock" << endl;
-            else cout << "  Obstacle: Tree" << endl;
-            Sleep(1500);
-            cout << "  Rerouting... (Extra 5% battery used)" << endl;
-            battery -= 5;
-            batteryUsed = 5;
-        }
-
-        int stages = 4;
-        for (int i = 1; i <= stages; i++)
-        {
-            clearScreen();
-            printShopHeader();
-            cout << "\n  DELIVERY IN PROGRESS" << endl;
-            cout << "  -------------------------------------------" << endl;
-
-            int progress = (i * 100) / stages;
-            cout << "  Progress: [";
-
-            int bars = progress / 5;
-            setColor(10);
-            for (int j = 0; j < bars; j++) cout << "#";
-            setColor(8);
-            for (int j = bars; j < 20; j++) cout << "-";
-            setColor(7);
-            cout << "] " << progress << "%" << endl;
-
-            cout << "  Distance remaining: " << (distance * (stages - i)) / stages << " km" << endl;
-            cout << "  -------------------------------------------\n" << endl;
-
-            printFlyingDrone(i);
-            if (i == 1) cout << "\n  Status: Taking off..." << endl;
-            else if (i == 2) cout << "\n  Status: Cruising..." << endl;
-            else if (i == 3) cout << "\n  Status: Approaching destination..." << endl;
-            else cout << "\n  Status: Landing..." << endl;
-
-            Sleep(1500);
-        }
-
-        int extraBattery = (distance * 3) + (10 + rand() % 11);
-        battery -= extraBattery;
-        batteryUsed += extraBattery;
-        if (battery < 0) battery = 0;
-
-        cout << "\nDelivery completed successfully!\n";
-        cout << "Battery used: " << batteryUsed << "%" << endl;
-        cout << "Time: " << timeOfDay << endl;
-        cout << "Weather: " << weather << endl;
-        totalOrders++;
-        successfulDeliveries++;
-        totalEarnings += price;
+       
         if (battery < 30)
             cout << "Battery low! Please recharge soon.\n";
     }
