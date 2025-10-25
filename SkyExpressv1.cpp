@@ -115,12 +115,10 @@ void printFlyingDrone(int frame)
 }
 
 // Function to show shop menu
-void showShopMenu()
-{
+void showShopMenu(){
     setColor(11);
     cout << "  Available Items:\n" << endl;
     setColor(7);
-
     cout << "  1. Pizza           - $15  (Hot & Fresh)" << endl;
     cout << "  2. Burger Meal     - $12  (Combo with Fries)" << endl;
     cout << "  3. Medicine        - $25  (Urgent Care Package)" << endl;
@@ -129,10 +127,10 @@ void showShopMenu()
     cout << "  6. Gift Package    - $30  (Special Occasion)" << endl;
     cout << "  7. Tacos           - $10  (Mexican Fiesta)" << endl;
     cout << "  8. Coffee & Snacks - $8   (Energy Boost)" << endl;
-}
+ }
 
 // Function to get item details
-void getItemDetails(int choice, string& itemName, string& emoji, int& price) {
+void getItemDetails(int choice, string& itemName, string& emoji, int& price){
     if (choice == 1)
     {
         itemName = "Pizza";
@@ -181,7 +179,7 @@ void getItemDetails(int choice, string& itemName, string& emoji, int& price) {
         emoji = "";
         price = 8;
     }
-}
+ }
 
 // Function to generate random weather
 string getRandomWeather()
