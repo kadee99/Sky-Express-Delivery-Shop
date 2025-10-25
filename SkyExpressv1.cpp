@@ -203,54 +203,103 @@ string getTimeOfDay()
     else if (hour >= 17 && hour < 21) return "Evening";
     else return "Night";
 }
+// Function to calculate distance
+int calculateDistance() {
+    return 1 + (rand() % 5);
+}
 
 int main() {
     srand(time(0));
     int battery = 100;
     int totalOrders = 0;
     int successfulDeliveries = 0;
+    int delayedDeliveries = 0;
     int totalEarnings = 0;
     bool running = true;
 
     clearScreen();
     printShopHeader();
+    cout << "\n  Welcome to Sky Express Delivery!" << endl;
+    cout << "  Press Enter to start...";
+    cin.ignore();
+    Sleep(1000);
 
-    while (battery >= 10) {
+
+    while (running) {
         clearScreen();
         printShopHeader();
 
         printDrone();
         printBattery(battery);
-        cout << "Total Orders: " << totalOrders << " | Success: " << successfulDeliveries << "\n";
-        cout << "Total Earnings: $" << totalEarnings << "\n\n";
+    cout << "\n  BUSINESS STATISTICS" << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Total Orders: " << totalOrders << endl;
+    cout << "  Successful: " << successfulDeliveries << " | Delayed: " << delayedDeliveries << endl;
+    cout << "  Total Earnings: $" << totalEarnings << endl;
+    cout << "  -------------------------------------------" << endl;
 
         showShopMenu();
 
-        cout << "\n  0. Exit\n";
-        cout << "\n  Choose an item: ";
+        cout << "\n  9. Recharge Drone" << endl;
+        cout << "  0. Exit Shop" << endl;
+        cout << "\n  Choose an option (0-9): ";
         int choice;
         cin >> choice;
-        if (choice == 0)
-            break;
+        cin.ignore();
+        if (choice >= 1 && choice <= 8) {
+        }
+        else if (choice == 9) {
+    clearScreen();
+    printShopHeader();
+    printDrone();
 
-        if (choice < 1 || choice > 8)
-        {
-            cout << "Invalid choice.\n";
-            continue;
+    cout << "\n  RECHARGE STATION" << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Current battery: " << battery << "%" << endl;
+
+    if (battery >= 90) {
+        cout << "\n  Battery is already high!" << endl;
+    }
+    else {
+        cout << "\n  Charging..." << endl;
+        int rechargeAmount = 100 - battery;
+        for (int i = 0; i < 5; i++) {
+            battery += rechargeAmount / 5;
+            if (battery > 100) battery = 100;
+            cout << "  Battery: " << battery << "%" << endl;
+            Sleep(800);
+        }
+        cout << "\n  Drone fully recharged!" << endl;
+        battery = 100;
+    }
+    Sleep(2000);
+
+        // RECHARGE 
+        }
+        else if (choice == 0) {
+        running = false;
+        }
+        else {
+        cout << "\n  Invalid choice! Press Enter to try again...";
+        cin.ignore();
         }
 
-        string item, emoji;
+        
+
+        string itemName, emoji;
         int price = 0;
-        getItemDetails(choice, item, emoji, price);
+        getItemDetails(choice, itemName, emoji, price);
 
         string name, address;
         cout << "\nEnter your name: ";
-        cin.ignore();
-        getline(cin, name);
+        getline(cin, customerName);
         cout << "Enter your address: ";
         getline(cin, address);
+        cout << "  Any special instructions? (or press Enter): ";
+        string instructions;
+        getline(cin, instructions);
 
-        int distance = 1 + rand() % 5;
+        int distance = calculateDistance();
         string timeOfDay = getTimeOfDay();
 
         clearScreen();
@@ -337,11 +386,14 @@ int main() {
 
         Sleep(2000);
 
-        if (deliveryCanceled)
-        {
-            totalOrders++;
-            continue;
+        if (deliveryCanceled) {
+        totalOrders++;
+        delayedDeliveries++;
+        cout << "\n  Press Enter to continue...";
+        cin.ignore();
+        continue;
         }
+
 
         bool hasObstacle = (rand() % 100) < 30;
         int batteryUsed = 0;
@@ -404,17 +456,37 @@ int main() {
         int extraBattery = (distance * 3) + (10 + rand() % 11);
         battery -= extraBattery;
         batteryUsed += extraBattery;
-        if (battery < 0) battery = 0;
+        if (battery < 0) 
+            battery = 0;
 
-        cout << "\nDelivery completed successfully!\n";
-        cout << "Battery used: " << batteryUsed << "%" << endl;
-        cout << "Time: " << timeOfDay << endl;
-        cout << "Weather: " << weather << endl;
-        totalOrders++;
-        successfulDeliveries++;
-        totalEarnings += price;
-        if (battery < 30)
-            cout << "Battery low! Please recharge soon.\n";
+    clearScreen();
+    printShopHeader();
+
+    cout << "\n  DELIVERY SUCCESSFUL!" << endl;
+    cout << "\n  Package delivered successfully." << endl;
+    cout << "  -------------------------------------------" << endl;
+    cout << "  Customer: " << customerName << endl;
+    cout << "  Item: " << itemName << endl;
+    cout << "  Location: " << address << endl;
+    cout << "  Distance: " << distance << " km" << endl;
+    cout << "  Battery used: " << batteryUsed << "%" << endl;
+    cout << "  Time: " << timeOfDay << endl;
+    cout << "  Weather: " << weather << endl;
+    cout << "  -------------------------------------------" << endl;
+
+    printBattery(battery);
+    totalEarnings += price;
+
+    cout << "\n  Earnings: +$" << price << endl;
+    cout << "  Customer satisfaction: " << (80 + rand() % 21) << "%" << endl;
+
+    totalOrders++;
+    successfulDeliveries++;
+    Sleep(4000);
+
+    cout << "\n  Press Enter to continue...";
+    cin.ignore();
+
     }
     if (battery <= 10)
         cout << "battery is too low to start another delivery";
@@ -425,11 +497,20 @@ int main() {
     cout << "  -------------------------------------------" << endl;
     cout << "  Total Orders: " << totalOrders << endl;
     cout << "  Successful Deliveries: " << successfulDeliveries << endl;
+    cout << "  Delayed/Canceled: " << delayedDeliveries << endl;
+    if (totalOrders > 0) {
+        cout << "  Success Rate: " << (successfulDeliveries * 100) / totalOrders << "%" << endl;
+    }
     cout << "  Total Revenue: $" << totalEarnings << endl;
     cout << "  Final Drone Battery: " << battery << "%" << endl;
     cout << "  -------------------------------------------" << endl;
+
     cout << "\n  Thank you for using Sky Express Delivery!" << endl;
     cout << "  Goodbye!" << endl;
+
+    Sleep(3000);
+    return 0;
+
     return 0;
 }
 
