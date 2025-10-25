@@ -7,8 +7,8 @@
 using namespace std;
 
 // Function to set console text color
-void setColor(int color
-){
+void setColor(int color)
+{
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
@@ -16,6 +16,17 @@ void setColor(int color
 void clearScreen()
 {
     system("cls");
+}
+
+// Function to print shop header
+void printShopHeader()
+{
+    setColor(14);
+    cout << "\n  ===========================================" << endl;
+    cout << "          SKY EXPRESS DELIVERY SHOP" << endl;
+    cout << "     Fast, Smart, Automated Deliveries!" << endl;
+    cout << "  ===========================================\n" << endl;
+    setColor(7);
 }
 
 // Function to print the drone battery bar
@@ -32,7 +43,8 @@ void printBattery(int battery){
         cout << "=";
     }
     setColor(7);
-    for (int i = bars; i < 20; i++){
+    for (int i = bars; i < 20; i++)
+    {
         cout << " ";
     }
 
@@ -68,7 +80,8 @@ void printBattery(int battery){
 }
 
 // Function to print animated drone
-void printDrone() {
+void printDrone()
+{
     setColor(11);
     cout << "\n     ___" << endl;
     cout << "    /   \\" << endl;
@@ -79,7 +92,8 @@ void printDrone() {
 }
 
 // Function to print flying drone animation
-void printFlyingDrone(int frame){
+void printFlyingDrone(int frame)
+{
     setColor(11);
     if (frame % 2 == 0) {
         cout << "   O  O  O" << endl;
@@ -88,7 +102,8 @@ void printFlyingDrone(int frame){
         cout << "   | ^_^ |  ~~ Flying ~~" << endl;
         cout << "    \\___/" << endl;
     }
-    else {
+    else
+    {
         cout << "     O O O" << endl;
         cout << "     ___" << endl;
         cout << "    /   \\" << endl;
@@ -125,14 +140,14 @@ void showShopMenu(){
 }
 
 // Function to get item details
-void getItemDetails(int choice, string& itemName, string& emoji, int& price){
-    if (choice == 1) 
+void getItemDetails(int choice, string& itemName, string& emoji, int& price) {
+    if (choice == 1)
     {
         itemName = "Pizza";
         emoji = "";
         price = 15;
     }
-    else if (choice == 2) 
+    else if (choice == 2)
     {
         itemName = "Burger Meal";
         emoji = "";
@@ -150,25 +165,25 @@ void getItemDetails(int choice, string& itemName, string& emoji, int& price){
         emoji = "";
         price = 20;
     }
-    else if (choice == 5) 
+    else if (choice == 5)
     {
         itemName = "Electronics";
         emoji = "";
         price = 50;
     }
-    else if (choice == 6) 
+    else if (choice == 6)
     {
         itemName = "Gift Package";
         emoji = "";
         price = 30;
     }
-    else if (choice == 7) 
+    else if (choice == 7)
     {
         itemName = "Tacos";
         emoji = "";
         price = 10;
     }
-    else if (choice == 8) 
+    else if (choice == 8)
     {
         itemName = "Coffee & Snacks";
         emoji = "";
