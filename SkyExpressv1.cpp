@@ -33,24 +33,26 @@ void printBattery(int battery)
 {
     cout << "\n  Battery: [";
 
+     // number of "bars" to show in the progress bar (20 bars total)
     int bars = battery / 5;
-
-    if (battery > 60) setColor(10);
-    else if (battery > 30) setColor(14);
-    else setColor(12);
-
+// color the bar depending on battery level
+    if (battery > 60) setColor(10);// green
+    else if (battery > 30) setColor(14);// yellow
+    else setColor(12);// red
+    // filled portion
     for (int i = 0; i < bars; i++)
     {
         cout << "=";
     }
     setColor(7);
+     // empty portion
     for (int i = bars; i < 20; i++)
     {
         cout << " ";
     }
 
     cout << "] " << battery << "%";
-
+     // text status next to the battery in numbers
     if (battery > 80)
     {
         setColor(10);
@@ -93,6 +95,7 @@ void printDrone()
 }
 
 // Function to print flying drone animation
+// The frame parameter toggles small differences to simulate motion.
 void printFlyingDrone(int frame)
 {
     setColor(11);
@@ -194,7 +197,7 @@ string getRandomWeather()
     else return "CLEAR";
 }
 
-// Function to get time of day
+// Return a randomized time-of-day string
 string getTimeOfDay()
 {
     int hour = rand() % 24;
@@ -203,7 +206,7 @@ string getTimeOfDay()
     else if (hour >= 17 && hour < 21) return "Evening";
     else return "Night";
 }
-// Function to calculate distance
+// Function to calculate distance between 1 and 5 km
 int calculateDistance() {
     return 1 + (rand() % 5);
 }
@@ -219,18 +222,19 @@ int main() {
 
     clearScreen();
     printShopHeader();
-    cout << "\n  Welcome to Sky Express Delivery!" << endl;
+    cout << "\n  Welcome to Sky Express Delivery!" << endl;// Welcome screen
     cout << "  Press Enter to start...";
-    cin.ignore();
+    cin.ignore();// wait for Enter(consumes a newline)
     Sleep(1000);
 
-
+    // runs while "running" is true
     while (running) {
         clearScreen();
         printShopHeader();
 
         printDrone();
         printBattery(battery);
+        //stats
     cout << "\n  BUSINESS STATISTICS" << endl;
     cout << "  -------------------------------------------" << endl;
     cout << "  Total Orders: " << totalOrders << endl;
@@ -245,10 +249,13 @@ int main() {
         cout << "\n  Choose an option (0-9): ";
         int choice;
         cin >> choice;
-        cin.ignore();
+        cin.ignore();// consume newline before getline usage later
+        // if user chose an item (1-8) we will continue to order processing,
+        // otherwise handle recharge/exit/invalid at that ppoint.
         if (choice >= 1 && choice <= 8) {
         }
         else if (choice == 9) {
+    //Recharge branch
     clearScreen();
     printShopHeader();
     printDrone();
@@ -263,6 +270,7 @@ int main() {
     else {
         cout << "\n  Charging..." << endl;
         int rechargeAmount = 100 - battery;
+         // simple simulated recharge animation
         for (int i = 0; i < 5; i++) {
             battery += rechargeAmount / 5;
             if (battery > 100) battery = 100;
@@ -274,9 +282,10 @@ int main() {
     }
     Sleep(2000);
 
-        // RECHARGE 
+        // RECHARGE finished loop restarts
         }
         else if (choice == 0) {
+        // Exit the program cleanly so final report prints
         running = false;
         }
         else {
@@ -295,10 +304,10 @@ int main() {
         getline(cin, customerName);
         cout << "Enter your address: ";
         getline(cin, address);
-        cout << "  Any special instructions? (or press Enter): ";
+        cout << "Any special instructions? (or press Enter): ";
         string instructions;
         getline(cin, instructions);
-
+        //parameters for delivery
         int distance = calculateDistance();
         string timeOfDay = getTimeOfDay();
 
@@ -316,7 +325,7 @@ int main() {
         cout << "  Distance: " << distance << " km" << endl;
         cout << "  Time: " << timeOfDay << endl;
         cout << "  -------------------------------------------" << endl;
-
+        // preparing and loading animation
         cout << "\n  Preparing order..." << endl;
         Sleep(1000);
         cout << "  Packing item securely..." << endl;
@@ -330,7 +339,7 @@ int main() {
         cout << "\n  Drone loaded and ready!" << endl;
         setColor(7);
         Sleep(1500);
-
+        // Check weather & decide if delivery will proceed or not
         string weather = getRandomWeather();
         clearScreen();
         printShopHeader();
@@ -391,10 +400,10 @@ int main() {
         delayedDeliveries++;
         cout << "\n  Press Enter to continue...";
         cin.ignore();
-        continue;
+        continue;//go back to menu loop
         }
 
-
+        // Simulate obstacles and battery usage
         bool hasObstacle = (rand() % 100) < 30;
         int batteryUsed = 0;
 
@@ -421,7 +430,7 @@ int main() {
             battery -= 5;
             batteryUsed = 5;
         }
-
+        // Delivery progress in stages, showing progress bar each stage
         int stages = 4;
         for (int i = 1; i <= stages; i++)
         {
@@ -452,13 +461,13 @@ int main() {
 
             Sleep(1500);
         }
-
+         // Battery consumption calculation and update
         int extraBattery = (distance * 3) + (10 + rand() % 11);
         battery -= extraBattery;
         batteryUsed += extraBattery;
         if (battery < 0) 
             battery = 0;
-
+    // Show delivery success with details
     clearScreen();
     printShopHeader();
 
