@@ -299,7 +299,7 @@ int main() {
         int price = 0;
         getItemDetails(choice, itemName, emoji, price);
 
-        string name, address;
+        string customerName, address;
         cout << "\nEnter your name: ";
         getline(cin, customerName);
         cout << "Enter your address: ";
@@ -318,9 +318,9 @@ int main() {
         cout << "\n  ORDER DETAILS" << endl;
         setColor(7);
         cout << "  -------------------------------------------" << endl;
-        cout << "  Item: " << item << endl;
+        cout << "  Item: " << itemName << endl;
         cout << "  Price: $" << price << endl;
-        cout << "  Customer: " << name << endl;
+        cout << "  Customer: " << customerName << endl;
         cout << "  Address: " << address << endl;
         cout << "  Distance: " << distance << " km" << endl;
         cout << "  Time: " << timeOfDay << endl;
