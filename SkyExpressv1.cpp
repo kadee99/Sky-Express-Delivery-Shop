@@ -287,6 +287,7 @@ int main() {
         else if (choice == 0) {
         // Exit the program cleanly so final report prints
         running = false;
+        continue;
         }
         else {
         cout << "\n  Invalid choice! Press Enter to try again...";
